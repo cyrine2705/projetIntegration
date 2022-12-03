@@ -4,7 +4,7 @@ import 'package:projet_integration/screens/profile.dart';
 import 'package:projet_integration/screens/recycle_request.dart';
 
 import 'list_materiel.dart';
-import 'price_list.dart';
+import 'coins_list.dart';
 
 class Home extends StatefulWidget {
   Home({Key? key}) : super(key: key);

@@ -24,9 +24,19 @@ abstract class UserManagementService {
         body: json.encode({"username": username, "password": password}));
   }
 
-  static dynamic googleLogin() {}
+  static Future<http.Response> googleLogin() async {
+    return await http.get(
+      Uri.parse(Hosts.gatewayUrl + "/googleLoginGateway"),
+      headers: {"Content-type": "application/json"},
+    );
+  }
 
-  static dynamic facebookLogin() {}
+  static Future<http.Response> facebookLogin() async {
+    return await http.get(
+      Uri.parse(Hosts.gatewayUrl + "/facebookLoginGateway"),
+      headers: {"Content-type": "application/json"},
+    );
+  }
 
   static Future<http.Response> logout(String token) async {
     return await http.delete(Uri.parse(Hosts.gatewayUrl + "/logout"),

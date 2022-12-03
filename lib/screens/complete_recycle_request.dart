@@ -2,6 +2,7 @@ import 'dart:convert';
 
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
+import 'package:projet_integration/screens/validate_detail_page.dart';
 import 'package:projet_integration/services/RecycleRequestManagementService.dart';
 
 import '../helpers/DirectoryHelper.dart';
@@ -100,13 +101,13 @@ class _CompleteRecycleRequestState extends State<CompleteRecycleRequest> {
     );
   }
 
-  Widget _ProductItem(int id, String imgpath, String name, int quantite,
+  Widget _ProductItem(int id, String imgpath, String name, double quantite,
       String location, String unit, String dateSubmitted, String status) {
     return Padding(
         padding: const EdgeInsets.only(left: 10.0, right: 10.0, top: 10.0),
         child: InkWell(
           onTap: () {
-            Get.to(DetailPage(), arguments: [
+            Get.to(ValidatePage(), arguments: [
               id,
               imgpath,
               name,

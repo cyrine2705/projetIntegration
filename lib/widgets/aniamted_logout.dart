@@ -2,6 +2,7 @@ import 'dart:convert';
 
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
+import 'package:projet_integration/screens/ChoosePage.dart';
 import 'package:projet_integration/screens/signin.dart';
 import 'package:projet_integration/screens/signup.dart';
 
@@ -171,7 +172,7 @@ class _FoldableOptionsState extends State<FoldableOptions>
     dynamic data = await DirectoryHelper.getUserData();
     setState(() {
       userData = data;
-      print("userdata state $userData");
+      print("hedhy userdata state $userData");
     });
   }
 
@@ -201,7 +202,9 @@ class _FoldableOptionsState extends State<FoldableOptions>
               content: Text(responseData["message"]),
               actions: [
                 ElevatedButton(
-                    onPressed: Navigator.of(context).pop,
+                    onPressed: (() {
+                      Get.off(Choose());
+                    }),
                     child: Text("OK"),
                     style: ButtonStyle(
                         backgroundColor: MaterialStateProperty.all(

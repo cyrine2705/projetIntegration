@@ -33,8 +33,13 @@ abstract class RecycleRequestManagementService {
         body: json.encode({"id": recycleRequestId}));
   }
 
-  static void completeRecycleRequest(
-      RecycleRequest recycleRequest, String token) {}
+  static Future<http.Response> completeRecycleRequest(
+      int recycleRequestId, String token) async {
+    return await http.patch(
+        Uri.parse(Hosts.gatewayUrl + "/completeRecycleRequest"),
+        headers: {"Content-type": "application/json", "Token": token},
+        body: json.encode({"id": recycleRequestId}));
+  }
 
   //the recycle requests that the citizen made
   static Future<http.Response> getRecycleRequestsMade(String token) async {
@@ -53,7 +58,8 @@ abstract class RecycleRequestManagementService {
   static Future<http.Response> getAllValidatedRecycleRequests(
       String token) async {
     return await http.get(
-        Uri.parse(Hosts.gatewayUrl + "/getValidatedRecycleRequests/"),
+        Uri.parse(
+            "https://e-recyclecoreservice-production-ffdc.up.railway.app/core/getValidatedRecycleRequests"),
         headers: {"Content-type": "application/json", "Token": token});
   }
 

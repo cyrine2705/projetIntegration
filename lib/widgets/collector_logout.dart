@@ -2,6 +2,7 @@ import 'dart:convert';
 
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
+import 'package:projet_integration/screens/ChoosePage.dart';
 import 'package:projet_integration/screens/sign_in_collector.dart';
 import 'package:projet_integration/screens/sign_up_collector.dart';
 
@@ -108,7 +109,9 @@ class _CollectorLogoutState extends State<CollectorLogout> {
               content: Text(responseData["message"]),
               actions: [
                 ElevatedButton(
-                    onPressed: Navigator.of(context).pop,
+                    onPressed: (() {
+                      Get.off(Choose());
+                    }),
                     child: Text("OK"),
                     style: ButtonStyle(
                         backgroundColor: MaterialStateProperty.all(

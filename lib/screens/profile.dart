@@ -1,11 +1,15 @@
+import 'dart:convert';
+
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
+import 'package:projet_integration/models/Citizen.dart';
 import 'package:projet_integration/screens/signin.dart';
 import 'package:projet_integration/widgets/aniamted_logout.dart';
 import 'package:projet_integration/widgets/boxes_coin.dart';
 import 'package:projet_integration/widgets/pie.dart';
 
 import '../helpers/DirectoryHelper.dart';
+import '../services/RecycleRequestManagementService.dart';
 import '../services/UserManagementService.dart';
 import 'signup.dart';
 
@@ -18,25 +22,20 @@ class Profile extends StatefulWidget {
 
 class _ProfileState extends State<Profile> {
   late Map<String, dynamic> userData = Map<String, dynamic>();
+
   @override
   void initState() {
     super.initState();
-  }
-
-  Future<void> loadUserData() async {
-    dynamic data = await DirectoryHelper.getUserData();
-
-    userData = data;
-    print("userdata state $userData");
-  }
-
-  logout() async {
     loadUserData();
-    String token = await DirectoryHelper.getToken();
-    UserManagementService.logout(token);
-    print("token=$token");
-    DirectoryHelper.deleteUserData();
-    Get.off(SignIn());
+  }
+
+  var txt = 0;
+  Future<void> loadUserData() async {
+    await DirectoryHelper.getUserData().then((data) => setState(() {
+          userData = data;
+
+          txt = (userData["user"]["recycleCoins"]);
+        }));
   }
 
   @override
@@ -66,7 +65,7 @@ class _ProfileState extends State<Profile> {
                     ),
                     width: 250,
                     height: 100,
-                    child: coin(),
+                    child: coin(txt),
                   ),
                 ),
                 //Container
@@ -96,25 +95,27 @@ class _ProfileState extends State<Profile> {
   }
 }
 
-Widget coin() {
+Widget coin(txt) {
   return Row(
     mainAxisAlignment: MainAxisAlignment.center,
-    children: const [
-      BoxCoins(image: "assets/images/coin.png", text: "coins", text1: "4000"),
+    children: [
+      BoxCoins(image: "assets/images/coin.png", text: "coins", text1: "$txt"),
       VerticalDivider(
         width: 30,
         indent: 30,
         endIndent: 30,
         color: Colors.black38,
       ),
-      BoxCoins(image: "assets/images/weigth.png", text: "Weigth", text1: "25 kg"),
+      BoxCoins(
+          image: "assets/images/weigth.png", text: "Weigth", text1: "25 kg"),
       VerticalDivider(
         width: 30,
         indent: 30,
         endIndent: 30,
         color: Colors.black38,
       ),
-      BoxCoins(image: "assets/images/request.png", text: "Requests", text1: "27"),
+      BoxCoins(
+          image: "assets/images/request.png", text: "Requests", text1: "27"),
     ],
   );
 }

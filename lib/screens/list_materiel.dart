@@ -3,6 +3,7 @@ import 'dart:convert';
 import 'package:flutter/material.dart';
 import 'package:geocoding/geocoding.dart';
 import 'package:geolocator/geolocator.dart';
+import 'package:http/retry.dart';
 
 import 'package:number_selection/number_selection.dart';
 
@@ -82,6 +83,7 @@ class _ListMaterialState extends State<ListMaterial> {
                           onConfirm: () {
                             setState(() {
                               _getCurrentPosition();
+
                               type = gridlist[index].title!;
                               submit();
                               Get.back();
@@ -177,6 +179,7 @@ class _ListMaterialState extends State<ListMaterial> {
     setState(() {
       isLoading = true;
     });
+
     RecycleRequestManagementService.makeRecycleRequest(
             RecycleRequest.createRecycleRequest(
                 type.toString(),
@@ -187,8 +190,6 @@ class _ListMaterialState extends State<ListMaterial> {
                 "Pending"),
             await DirectoryHelper.getToken())
         .then((response) {
-      print(_currentAddress);
-      this.reset();
       dynamic responseData = jsonDecode(response.body);
       setState(() {
         isLoading = false;
@@ -210,6 +211,8 @@ class _ListMaterialState extends State<ListMaterial> {
             );
           });
     });
+
+    reset();
   }
 
   void reset() {
@@ -240,17 +243,18 @@ class _ListMaterialState extends State<ListMaterial> {
   Future<void> _getCurrentPosition() async {
     final hasPermission = await _handleLocationPermission();
 
-    if (!hasPermission) return;
     await Geolocator.getCurrentPosition(desiredAccuracy: LocationAccuracy.high)
-        .then((Position position) {
+        .then((Position position) async {
       setState(() => _currentPosition = position);
-      _getAddressFromLatLng(_currentPosition!);
+      print(" $position");
+      await _getAddressFromLatLng(_currentPosition!);
+      submit();
     }).catchError((e) {
       print(e);
     });
   }
 
-  Future<void> _getAddressFromLatLng(Position position) async {
+  Future<String?> _getAddressFromLatLng(Position position) async {
     await placemarkFromCoordinates(
             _currentPosition!.latitude, _currentPosition!.longitude)
         .then((List<Placemark> placemarks) {
@@ -258,9 +262,13 @@ class _ListMaterialState extends State<ListMaterial> {
       setState(() {
         _currentAddress =
             '${place.street}, ${place.subLocality}, ${place.subAdministrativeArea}, ${place.postalCode}';
+
+        print("$_currentAddress");
       });
+      return _currentAddress.toString();
     }).catchError((e) {
       debugPrint(e);
+      return e;
     });
   }
 }

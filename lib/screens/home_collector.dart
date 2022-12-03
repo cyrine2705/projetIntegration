@@ -2,7 +2,7 @@ import 'dart:convert';
 
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
-import 'package:projet_integration/screens/complete_recycler_equest.dart';
+import 'package:projet_integration/screens/complete_recycle_request.dart';
 import 'package:projet_integration/services/RecycleRequestManagementService.dart';
 import 'package:projet_integration/widgets/collector_logout.dart';
 
